@@ -1,0 +1,323 @@
+/* =========================================================
+   style.css —— 全部样式与主题变量
+   ========================================================= */
+
+/* ---------- 主题变量：浅色模式 ---------- */
+:root {
+  color-scheme: light;
+
+  /* 布局尺寸 */
+  --page-max: 1200px;          /* 内容最大宽度 */
+  --radius-card: 10px;         /* 卡片圆角（Win7 风格的小圆角） */
+  --radius-icon: 8px;          /* 方形图标圆角 */
+  --card-border-width: 2px;    /* 卡片边框粗细 */
+
+  /* 基础色 */
+  --bg: #f4f7f6;
+  --card-bg: #ffffff;
+  --title: #0d1412;
+  --text: #64736f;
+
+  /* 主题色：深青 #009999（与深色模式的 #00FFFF 同色相） */
+  --accent-rgb: 0, 153, 153;
+  --card-border: rgba(0, 153, 153, 0.55);        /* 常态边框 */
+  --card-border-hover: rgba(0, 196, 196, 0.95);  /* 悬停：变浅 */
+  --card-border-active: rgba(0, 102, 102, 1);    /* 按下：变深 */
+  --glow: rgba(0, 153, 153, 0.13);               /* 标签径向渐变 */
+
+  /* 标签 */
+  --tag-border: rgba(13, 20, 18, 0.16);
+  --tag-text: #6f7e7a;
+
+  /* 阴影 */
+  --shadow-hover: rgba(13, 20, 18, 0.18);
+  --shadow-active: rgba(13, 20, 18, 0.08);
+
+  /* 背景图遮罩浓度（由 config.js 里的 background.dim 覆盖） */
+  --bg-dim: 0.86;
+  --bg-veil: rgba(244, 247, 246, var(--bg-dim));
+}
+
+/* ---------- 主题变量：深色模式 ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --bg: #0c1010;
+    --card-bg: #151b1a;
+    --title: #ffffff;
+    --text: #93a3a0;
+
+    /* 主题色：#00FFFF */
+    --accent-rgb: 0, 255, 255;
+    --card-border: rgba(0, 255, 255, 0.5);
+    --card-border-hover: rgba(150, 255, 255, 0.95);
+    --card-border-active: rgba(0, 140, 140, 1);
+    --glow: rgba(0, 255, 255, 0.13);
+
+    --tag-border: rgba(255, 255, 255, 0.16);
+    --tag-text: #9dadaa;
+
+    --shadow-hover: rgba(0, 0, 0, 0.55);
+    --shadow-active: rgba(0, 0, 0, 0.35);
+
+    --bg-veil: rgba(8, 12, 12, var(--bg-dim));
+  }
+}
+
+/* ---------- 基础重置 ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ---------- 背景图层 ---------- */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;                  /* 位于内容之下、body 背景之上 */
+  pointer-events: none;
+
+  background-image: var(--bg-image, none);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* 遮罩：让背景图在深浅两种模式下都保持足够对比度 */
+.bg-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--bg-veil);
+  transition: background-color 0.25s ease;
+}
+
+/* 内容层压在背景之上 */
+.site-header,
+.site-main,
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- 顶部 Logo ---------- */
+.site-header {
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 32px 24px 8px;
+}
+
+.logo-link {
+  display: inline-block;
+  border-radius: var(--radius-icon);
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.logo-link:hover { opacity: 0.85; transform: translateY(-1px); }
+.logo-link:active { opacity: 0.7; transform: translateY(0); }
+.logo-link:focus-visible {
+  outline: 2px solid var(--card-border-hover);
+  outline-offset: 4px;
+}
+
+.logo {
+  display: block;
+  height: 48px;                        /* 显示高度，宽度按比例自适应 */
+  width: auto;
+  max-width: min(280px, 70vw);
+  object-fit: contain;
+}
+
+/* ---------- 主体 / 网格 ---------- */
+.site-main {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 28px 24px 56px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));  /* 1920 宽屏一行三个 */
+  gap: 24px;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+
+  background-color: var(--card-bg);
+  border: var(--card-border-width) solid var(--card-border);
+  border-radius: var(--radius-card);
+
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.22s ease,
+    transform 0.18s ease,
+    background-color 0.25s ease;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    border-color: var(--card-border-hover);
+    box-shadow: 0 12px 32px var(--shadow-hover);
+    transform: translateY(-3px);
+  }
+}
+
+.card:active {
+  border-color: var(--card-border-active);
+  box-shadow: 0 4px 12px var(--shadow-active);
+  transform: translateY(0) scale(0.995);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--card-border-hover);
+  outline-offset: 3px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.card-icon {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-icon);
+  object-fit: cover;
+  display: block;
+  background-color: var(--glow);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.06rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: var(--title);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  transition: color 0.25s ease;
+}
+
+.card-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  transition: color 0.25s ease;
+}
+
+/* ---------- 标签 ---------- */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  white-space: nowrap;
+
+  color: var(--tag-text);
+  border: 1px solid var(--tag-border);
+  border-radius: 999px;
+
+  background-color: var(--card-bg);
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    var(--card-bg) 0%,
+    var(--card-bg) 55%,
+    var(--glow) 100%
+  );
+
+  transition: background-color 0.25s ease;
+}
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+  flex: 0 0 auto;
+  padding: 24px 24px 40px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text);
+  opacity: 0.75;
+}
+
+.site-footer p { margin: 0; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1080px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 680px) {
+  .site-header { padding: 20px 18px 4px; }
+  .logo { height: 36px; max-width: 62vw; }
+
+  .site-main { padding: 16px 18px 36px; }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .card { padding: 18px; border-radius: var(--radius-card); gap: 12px; }
+
+  .card-icon {
+    flex-basis: 42px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .card-title { font-size: 1rem; }
+  .card-desc { font-size: 0.875rem; }
+
+  .site-footer { padding: 16px 18px 32px; }
+}
+
+/* ---------- 减少动画偏好 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  .card:hover { transform: none; }
+}

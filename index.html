@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#00FFFF">
+  <link rel="icon" href="assets/favicon.png">
+  <title>爪爪实验室 - PawLaboratory</title>
+
+  <!-- 页面样式 -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- 背景图层（留空则完全透明） -->
+  <div class="bg-layer" id="bgLayer" aria-hidden="true"></div>
+
+  <!-- 左上角 Logo -->
+  <header class="site-header">
+    <a class="logo-link" id="logoLink" href="#" target="_blank" rel="noopener noreferrer">
+      <img class="logo" id="logoImg" src="assets/logo.png" alt="" />
+    </a>
+  </header>
+
+  <!-- 卡片网格 -->
+  <main class="site-main">
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <p id="copyright"></p>
+  </footer>
+
+  <!-- 配置 -->
+  <script src="js/config.js"></script>
+  <!-- 渲染逻辑 -->
+  <script src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,2 +1,0 @@
-# pawlaboratory.github.io
-PawLaboratory
