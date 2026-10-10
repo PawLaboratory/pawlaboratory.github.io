@@ -8,13 +8,13 @@
 
   /* 布局尺寸 */
   --page-max: 1200px;          /* 内容最大宽度 */
-  --radius-card: 10px;         /* 卡片圆角（Win7 风格的小圆角） */
-  --radius-icon: 8px;          /* 方形图标圆角 */
+  --radius-card: 36px;         /* 卡片圆角（Win7 风格的小圆角） */
+  --radius-icon: 16px;          /* 方形图标圆角 */
   --card-border-width: 2px;    /* 卡片边框粗细 */
 
   /* 基础色 */
   --bg: #f4f7f6;
-  --card-bg: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.8);
   --title: #0d1412;
   --text: #64736f;
 
@@ -44,7 +44,7 @@
     color-scheme: dark;
 
     --bg: #0c1010;
-    --card-bg: #151b1a;
+    --card-bg: rgba(21, 27, 26, 0.8);
     --title: #ffffff;
     --text: #93a3a0;
 
@@ -264,12 +264,6 @@ body {
   border-radius: 999px;
 
   background-color: var(--card-bg);
-  background-image: radial-gradient(
-    circle at 50% 50%,
-    var(--card-bg) 0%,
-    var(--card-bg) 55%,
-    var(--glow) 100%
-  );
 
   transition: background-color 0.25s ease;
 }
